@@ -23,20 +23,20 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(useMaterial3: true),
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Welcome to Flutter'),
+          title: const Text('Welcome to Flutter Again'),
         ),
         body: Container(
           width: double.infinity,
           padding: const EdgeInsets.all(12),
-          child: Column(
+          child: const Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: const [
+            children: [
               Text(
-                'Flutter - The Complete Guide Course Again',
+                'Flutter - The Complete Guide Course Again Course',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 24,
+                  fontSize: 36,
                   fontWeight: FontWeight.bold,
                 ),
               ),
