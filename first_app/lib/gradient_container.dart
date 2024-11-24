@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import './hello_world_text.dart';
 
+const startAlignment = Alignment.topLeft;
+const endAlignment = Alignment.bottomRight;
+
 class GradientContainer extends StatelessWidget {
   const GradientContainer({super.key});
 
@@ -10,8 +13,8 @@ class GradientContainer extends StatelessWidget {
       decoration: const BoxDecoration(
         gradient: LinearGradient(
             colors: [Colors.blueGrey, Colors.orangeAccent],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight),
+            begin: startAlignment,
+            end: endAlignment),
       ),
       child: const Center(
         child: HelloWorldText(),
