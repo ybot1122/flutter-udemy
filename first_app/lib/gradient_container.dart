@@ -5,19 +5,25 @@ const startAlignment = Alignment.topLeft;
 const endAlignment = Alignment.bottomRight;
 
 class GradientContainer extends StatelessWidget {
-  const GradientContainer({super.key});
+  const GradientContainer(this.startColor, this.endColor, {super.key});
+
+  final Color startColor;
+  final Color endColor;
 
   @override
   Widget build(context) {
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         gradient: LinearGradient(
-            colors: [Colors.blueGrey, Colors.orangeAccent],
+            colors: [startColor, endColor],
             begin: startAlignment,
             end: endAlignment),
       ),
-      child: const Center(
-        child: HelloWorldText('Hello World'),
+      child: Center(
+        child: Image.asset(
+          "assets/images/dice-2.png",
+          width: 200,
+        ),
       ),
     );
   }
