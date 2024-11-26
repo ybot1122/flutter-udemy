@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import './hello_world_text.dart';
 
 const startAlignment = Alignment.topLeft;
 const endAlignment = Alignment.bottomRight;
+
+void rollDice() {}
 
 class GradientContainer extends StatelessWidget {
   const GradientContainer(this.startColor, this.endColor, {super.key});
@@ -20,10 +21,13 @@ class GradientContainer extends StatelessWidget {
             end: endAlignment),
       ),
       child: Center(
-        child: Image.asset(
-          "assets/images/dice-2.png",
-          width: 200,
-        ),
+        child: Column(children: [
+          Image.asset(
+            "assets/images/dice-2.png",
+            width: 200,
+          ),
+          const TextButton(onPressed: rollDice, child: Text('Roll Dice')),
+        ]),
       ),
     );
   }
