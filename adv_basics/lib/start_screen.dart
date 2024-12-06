@@ -26,11 +26,14 @@ class StartScreen extends StatelessWidget {
           //   ),
           // ),
           const SizedBox(height: 80),
-          Text(
-            "Learn Flutter the Fun Way!",
-            style: GoogleFonts.keaniaOne(
-              color: Colors.white,
-              fontSize: 32,
+          Container(
+            margin: const EdgeInsets.all(10),
+            child: Text(
+              "Learn Flutter the Fun Way!",
+              style: GoogleFonts.keaniaOne(
+                color: Colors.white,
+                fontSize: 32,
+              ),
             ),
           ),
           const SizedBox(height: 30),
