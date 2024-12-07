@@ -24,6 +24,10 @@ class _QuizState extends State<Quiz> {
           : activeScreen == 'questions-screen'
               ? 'results-screen'
               : 'start-screen';
+
+      if (activeScreen == 'start-screen') {
+        selectedAnswers = [];
+      }
     });
   }
 

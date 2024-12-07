@@ -30,6 +30,7 @@ class StartScreen extends StatelessWidget {
             margin: const EdgeInsets.all(10),
             child: Text(
               "Learn Flutter the Fun Way!",
+              textAlign: TextAlign.center,
               style: GoogleFonts.keaniaOne(
                 color: Colors.white,
                 fontSize: 32,

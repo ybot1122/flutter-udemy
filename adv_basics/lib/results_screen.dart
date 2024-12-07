@@ -54,14 +54,14 @@ class ResultsScreen extends StatelessWidget {
             const SizedBox(
               height: 30,
             ),
-            TextButton(
+            OutlinedButton.icon(
               onPressed: switchScreen,
-              child: const Text(
-                'Start Over',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white),
+              style: OutlinedButton.styleFrom(
+                foregroundColor: Colors.white,
               ),
-            )
+              icon: const Icon(Icons.restart_alt),
+              label: const Text("Restart Quiz!"),
+            ),
           ],
         ),
       ),
