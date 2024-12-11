@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:expense_tracker/models/expense.dart';
 
 class NewExpense extends StatefulWidget {
-  const NewExpense({super.key});
+  const NewExpense({super.key, required this.addNewExpense});
+
+  final void Function(Expense e) addNewExpense;
 
   @override
   State<StatefulWidget> createState() {
@@ -31,6 +33,37 @@ class _NewExpenseState extends State<NewExpense> {
     setState(() {
       _selectedDate = pickedDate;
     });
+  }
+
+  void _submitExpenseData() {
+    final enteredAmount = double.tryParse(_amountController.text);
+    final enteredText = _titleController.text.trim();
+    final amountIsInvalid = enteredAmount == null || enteredAmount < 0;
+    if (enteredText.isEmpty || amountIsInvalid || _selectedDate == null) {
+      showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+            title: const Text('Invalid Input'),
+            content: const Text(
+                'Please make sure a valid date, title, amount, and category was entered.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(ctx);
+                },
+                child: const Text('Okay'),
+              ),
+            ]),
+      );
+      return;
+    }
+
+    widget.addNewExpense(Expense(
+        amount: enteredAmount,
+        title: enteredText,
+        category: _selectedCategory!,
+        date: _selectedDate!));
+    Navigator.pop(context);
   }
 
   @override
@@ -94,7 +127,12 @@ class _NewExpenseState extends State<NewExpense> {
                 value: _selectedCategory,
                 items: Category.values
                     .map(
-                      (v) => DropdownMenuItem(value: v, child: Text(v.name)),
+                      (v) => DropdownMenuItem(
+                        value: v,
+                        child: Text(
+                          v.name.toUpperCase(),
+                        ),
+                      ),
                     )
                     .toList(),
                 onChanged: (value) {
@@ -103,12 +141,8 @@ class _NewExpenseState extends State<NewExpense> {
                   });
                 },
               ),
-              const Spacer(),
               ElevatedButton(
-                onPressed: () {
-                  print(_titleController.text);
-                  print(_amountController.text);
-                },
+                onPressed: _submitExpenseData,
                 child: const Text('Save Expense'),
               ),
               ElevatedButton(
