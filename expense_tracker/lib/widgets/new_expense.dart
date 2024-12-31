@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:expense_tracker/models/expense.dart';
 
@@ -35,11 +37,24 @@ class _NewExpenseState extends State<NewExpense> {
     });
   }
 
-  void _submitExpenseData() {
-    final enteredAmount = double.tryParse(_amountController.text);
-    final enteredText = _titleController.text.trim();
-    final amountIsInvalid = enteredAmount == null || enteredAmount < 0;
-    if (enteredText.isEmpty || amountIsInvalid || _selectedDate == null) {
+  void _showDialog() {
+    if (Platform.isIOS) {
+      showCupertinoDialog(
+        context: context,
+        builder: (ctx) => CupertinoAlertDialog(
+            title: const Text('Invalid Input'),
+            content: const Text(
+                'Please make sure a valid date, title, amount, and category was entered.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(ctx);
+                },
+                child: const Text('Okay'),
+              ),
+            ]),
+      );
+    } else {
       showDialog(
         context: context,
         builder: (ctx) => AlertDialog(
@@ -55,6 +70,15 @@ class _NewExpenseState extends State<NewExpense> {
               ),
             ]),
       );
+    }
+  }
+
+  void _submitExpenseData() {
+    final enteredAmount = double.tryParse(_amountController.text);
+    final enteredText = _titleController.text.trim();
+    final amountIsInvalid = enteredAmount == null || enteredAmount < 0;
+    if (enteredText.isEmpty || amountIsInvalid || _selectedDate == null) {
+      _showDialog();
       return;
     }
 
@@ -145,6 +169,11 @@ class _NewExpenseState extends State<NewExpense> {
                         },
                       ),
                       const Spacer(),
+                      Text(
+                        _selectedDate == null
+                            ? 'Selected Date'
+                            : formatter.format(_selectedDate!),
+                      ),
                       IconButton(
                         onPressed: _presentDatePicker,
                         icon: const Icon(Icons.calendar_month),
