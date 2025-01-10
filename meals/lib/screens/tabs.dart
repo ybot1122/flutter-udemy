@@ -40,8 +40,6 @@ class _TabsScreenState extends State<TabsScreen> {
   void _toggleMealFavoriteStatus(Meal meal) {
     final isExisting = _favoriteMeals.contains(meal);
 
-    print(meal);
-
     if (isExisting) {
       setState(() {
         _favoriteMeals.remove(meal);

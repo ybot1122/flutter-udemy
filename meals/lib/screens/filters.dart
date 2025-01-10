@@ -51,7 +51,9 @@ class _FiltersScreenState extends State<FiltersScreen> {
         }),
         */
         body: PopScope(
+          canPop: false,
           onPopInvokedWithResult: (bool didPop, dynamic result) {
+            print(didPop);
             if (didPop) return;
             Navigator.of(context).pop({
               Filter.glutenFree: _glutenFreeFilterSet,
