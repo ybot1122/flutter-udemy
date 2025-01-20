@@ -2,19 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:shopping_list/models/category.dart';
 
-enum Categories {
-  vegetables,
-  fruit,
-  meat,
-  dairy,
-  carbs,
-  sweets,
-  spices,
-  convenience,
-  hygiene,
-  other
-}
-
 final categories = {
   Categories.vegetables: Category(
     'Vegetables',

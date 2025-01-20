@@ -9,27 +9,19 @@ class Shoppinglist extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.all(8),
-      children: items.map((e) {
-        return Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Row(
-            key: ValueKey(e.id),
-            children: [
-              Container(
-                width: 25,
-                height: 25,
-                color: e.category.color,
-              ),
-              const SizedBox(width: 25),
-              Text(e.name),
-              const Spacer(),
-              Text(e.quantity.toString()),
-            ],
-          ),
-        );
-      }).toList(),
+    return ListView.builder(
+      itemCount: items.length,
+      itemBuilder: (ctx, index) => ListTile(
+        title: Text(items[index].name),
+        leading: Container(
+          width: 24,
+          height: 24,
+          color: items[index].category.color,
+        ),
+        trailing: Text(
+          items[index].quantity.toString(),
+        ),
+      ),
     );
   }
 }
