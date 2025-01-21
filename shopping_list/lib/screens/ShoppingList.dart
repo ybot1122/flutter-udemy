@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:shopping_list/data/dummy_items.dart';
 
 class Shoppinglist extends StatelessWidget {
-  Shoppinglist({super.key});
+  Shoppinglist({super.key, required this.items});
 
-  final items = groceryItems;
+  final items;
 
   // This widget is the root of your application.
   @override

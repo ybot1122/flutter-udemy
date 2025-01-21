@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_list/data/dummy_items.dart';
+import 'package:shopping_list/models/grocery_item.dart';
 import 'package:shopping_list/screens/ShoppingList.dart';
 import 'package:shopping_list/widgets/new_item.dart';
 
@@ -42,18 +43,26 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  void _addItem() {
-    Navigator.of(context).push(
+  final List<GroceryItem> _groceryItems = [];
+
+  void _addItem() async {
+    final newItem = await Navigator.of(context).push<GroceryItem>(
       MaterialPageRoute(
         builder: (ctx) => NewItem(),
       ),
     );
+
+    if (newItem != null) {
+      setState(() {
+        _groceryItems.add(newItem);
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Shoppinglist(),
+      body: Shoppinglist(items: _groceryItems),
       appBar: AppBar(
         title: Text(
           'Grocery List',
