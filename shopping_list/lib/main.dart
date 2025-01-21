@@ -62,7 +62,14 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Shoppinglist(items: _groceryItems),
+      body: Shoppinglist(
+        items: _groceryItems,
+        deleteItem: (item) {
+          setState(() {
+            _groceryItems.remove(item);
+          });
+        },
+      ),
       appBar: AppBar(
         title: Text(
           'Grocery List',
