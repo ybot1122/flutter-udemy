@@ -47,53 +47,40 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   List<GroceryItem> _groceryItems = [];
-  var _isLoading = true;
   String? _error;
+  late Future<List<GroceryItem>> _loadedItems;
 
-  void _loadItems() async {
+  Future<List<GroceryItem>> _loadItems() async {
     final url = Uri.https(
         "flutter-prep-9de08-default-rtdb.firebaseio.com", 'shopping-list.json');
 
-    try {
-      final response = await http.get(url, headers: {
-        'Content-Type': 'application/json',
-      });
-      if (response.statusCode >= 400) {
-        setState(() {
-          _error = "Failed to fetch data. Please try again later";
-        });
-      }
-
-      if (response.body == "null") {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-
-      final Map<String, dynamic> listData = json.decode(response.body);
-
-      final List<GroceryItem> _loadedItems = [];
-
-      for (final item in listData.entries) {
-        final category = categories.entries
-            .firstWhere((t) => t.value.name == item.value['category'])
-            .value;
-        _loadedItems.add(GroceryItem(
-            id: item.key,
-            name: item.value['name'],
-            quantity: item.value['quantity'],
-            category: category));
-      }
-
-      setState(() {
-        _groceryItems = _loadedItems;
-        _isLoading = false;
-      });
-    } catch (err) {
-      setState(() {
-        _error = 'Something went wrong';
-      });
+    final response = await http.get(url, headers: {
+      'Content-Type': 'application/json',
+    });
+    if (response.statusCode >= 400) {
+      throw Exception('Failed to fetch grocery items. Please try again later');
     }
+
+    if (response.body == "null") {
+      return [];
+    }
+
+    final Map<String, dynamic> listData = json.decode(response.body);
+
+    final List<GroceryItem> _loadedItems = [];
+
+    for (final item in listData.entries) {
+      final category = categories.entries
+          .firstWhere((t) => t.value.name == item.value['category'])
+          .value;
+      _loadedItems.add(GroceryItem(
+          id: item.key,
+          name: item.value['name'],
+          quantity: item.value['quantity'],
+          category: category));
+    }
+
+    return _loadedItems;
   }
 
   void _addItem() async {
@@ -103,49 +90,54 @@ class _HomeState extends State<Home> {
       ),
     );
 
-    if (newItem != null) {
-      setState(() {
-        _groceryItems.add(newItem);
-      });
-    }
+    setState(() {
+      _loadedItems = _loadItems();
+    });
   }
 
   @override
   void initState() {
     super.initState();
-    _loadItems();
+    _loadedItems = _loadItems();
   }
 
   @override
   Widget build(BuildContext context) {
-    Widget content = Shoppinglist(
-      items: _groceryItems,
-      deleteItem: (item) async {
-        final index = _groceryItems.indexOf(item);
-        setState(() {
-          _groceryItems.remove(item);
+    Widget content = FutureBuilder(
+        future: _loadedItems,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (snapshot.hasError) {
+            return Center(child: Text(snapshot.error.toString()));
+          }
+
+          return Shoppinglist(
+            items: snapshot.requireData,
+            deleteItem: (item) async {
+              deleteAndUpdate() async {
+                final url = Uri.https(
+                    "flutter-prep-9de08-default-rtdb.firebaseio.com",
+                    'shopping-list/${item.id}.json');
+
+                final response = await http.delete(url, headers: {
+                  'Content-Type': 'application/json',
+                });
+                if (response.statusCode >= 400) {
+                  throw Exception("Failed to delete item");
+                }
+
+                return await _loadItems();
+              }
+
+              setState(() {
+                _loadedItems = deleteAndUpdate();
+              });
+            },
+          );
         });
-
-        final url = Uri.https("flutter-prep-9de08-default-rtdb.firebaseio.com",
-            'shopping-list/${item.id}.json');
-
-        final response = await http.delete(url, headers: {
-          'Content-Type': 'application/json',
-        });
-
-        if (response.statusCode >= 400) {
-          setState(() {
-            _groceryItems.insert(index, item);
-          });
-        }
-      },
-    );
-
-    if (_error != null) {
-      content = Center(child: Text(_error!));
-    } else if (_isLoading) {
-      content = const Center(child: CircularProgressIndicator());
-    }
 
     return Scaffold(
       body: content,
