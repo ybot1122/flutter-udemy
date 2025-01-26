@@ -1,3 +1,4 @@
+import 'package:favorite_places/model/Place.dart';
 import 'package:favorite_places/screens/Places.dart';
 import 'package:flutter/material.dart';
 
@@ -44,7 +45,9 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           title: Text("Great Places"),
         ),
-        body: PlacesScreen(),
+        body: PlacesScreen(
+          myPlaces: [Place(id: '213', name: 'Home')],
+        ),
       ),
     );
   }
