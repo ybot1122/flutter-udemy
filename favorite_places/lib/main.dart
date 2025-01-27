@@ -1,5 +1,5 @@
-import 'package:favorite_places/model/Place.dart';
-import 'package:favorite_places/screens/Places.dart';
+import 'package:favorite_places/model/place.dart';
+import 'package:favorite_places/screens/places.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

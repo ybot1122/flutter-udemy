@@ -1,6 +1,7 @@
-import 'package:favorite_places/model/Place.dart';
+import 'package:favorite_places/model/place.dart';
 import 'package:favorite_places/providers/MyPlacesProvider.dart';
 import 'package:favorite_places/screens/AddPlace.dart';
+import 'package:favorite_places/widgets/places_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -21,39 +22,11 @@ class PlacesScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     List<Place> myPlaces = ref.watch<List<Place>>(myPlacesProvider);
 
-    Widget content = Center(
-      child: Text(
-        "Please add places",
-        style: TextStyle(color: Theme.of(context).colorScheme.primary),
-      ),
-    );
-
-    if (myPlaces.isNotEmpty) {
-      content = ListView.builder(
-          padding: const EdgeInsets.all(8),
-          itemCount: myPlaces.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Row(
-                key: ValueKey(myPlaces[index].id),
-                children: [
-                  Text(
-                    myPlaces[index].name,
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontSize: 24,
-                    ),
-                  ),
-                ],
-              ),
-            );
-          });
-    }
+    Widget content = PlacesList(places: myPlaces);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Add a Place"),
+        title: const Text("Your Places"),
         actions: [
           IconButton(
               onPressed: () {

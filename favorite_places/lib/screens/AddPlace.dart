@@ -1,4 +1,4 @@
-import 'package:favorite_places/model/Place.dart';
+import 'package:favorite_places/model/place.dart';
 import 'package:favorite_places/providers/MyPlacesProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,7 +20,7 @@ class _AddPlaceScreenState extends ConsumerState<AddPlaceScreen> {
 
       ref
           .read(myPlacesProvider.notifier)
-          .togglePlace(Place(id: const Uuid().v4(), name: _enteredName));
+          .togglePlace(Place(name: _enteredName));
 
       Navigator.of(context).pop();
     }
