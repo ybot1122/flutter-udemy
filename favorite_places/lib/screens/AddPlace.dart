@@ -33,48 +33,50 @@ class _AddPlaceScreenState extends ConsumerState<AddPlaceScreen> {
         title: const Text("Great Places"),
         actions: const [],
       ),
-      body: Padding(
-          padding: EdgeInsets.all(8),
-          child: Form(
-              key: _formKey,
-              child: Column(
+      body: SingleChildScrollView(
+        padding: EdgeInsets.all(8),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              TextFormField(
+                maxLength: 50,
+                initialValue: "",
+                decoration: const InputDecoration(label: Text('Name')),
+                validator: (value) {
+                  if (value == null ||
+                      value.isEmpty ||
+                      value.trim().length <= 1 ||
+                      value.trim().length > 50) {
+                    return 'Must be between 1 and 50 characters.';
+                  }
+                  return null;
+                },
+                onSaved: (newValue) {
+                  _enteredName = newValue!;
+                },
+                style:
+                    TextStyle(color: Theme.of(context).colorScheme.onSurface),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  TextFormField(
-                    maxLength: 50,
-                    initialValue: "",
-                    decoration: const InputDecoration(label: Text('Name')),
-                    validator: (value) {
-                      if (value == null ||
-                          value.isEmpty ||
-                          value.trim().length <= 1 ||
-                          value.trim().length > 50) {
-                        return 'Must be between 1 and 50 characters.';
-                      }
-                      return null;
+                  TextButton(
+                    onPressed: () {
+                      _formKey.currentState!.reset();
                     },
-                    onSaved: (newValue) {
-                      _enteredName = newValue!;
-                    },
-                    style: TextStyle(
-                        color: Theme.of(context).colorScheme.secondary),
+                    child: Text('Reset'),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      TextButton(
-                        onPressed: () {
-                          _formKey.currentState!.reset();
-                        },
-                        child: Text('Reset'),
-                      ),
-                      ElevatedButton(
-                        onPressed: _saveItem,
-                        child: const Text('Add Item'),
-                      )
-                    ],
+                  ElevatedButton(
+                    onPressed: _saveItem,
+                    child: const Text('Add Item'),
                   )
                 ],
-              ))),
+              )
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
